@@ -49,7 +49,7 @@ const userSchema = new mongoose.Schema({
 userSchema.methods.generateAuthToken = async function(){
     const user = this
     /** todo: secreta też do .env mozna by przenieść */
-    const token = jwt.sign({_id: user._id.toString()}, 'secretsecret')
+    const token = jwt.sign({_id: user._id.toString()}, process.env.SECRET_KEY)
 
     user.tokens = user.tokens.concat({token})
     await user.save()
