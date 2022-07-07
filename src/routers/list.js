@@ -33,8 +33,14 @@ router.delete('/lists/:id', auth, async (req,res)=>{
     const id = req.params.id
 
     const list = await List.findOne({_id: id, owner: req.user._id})
-    await list.remove()
-    res.send(list)
+
+    if(list){
+        await list.remove()
+        res.send(list)
+    }else{
+        res.status(404).send()
+    }
+
 })
 
 module.exports = router
