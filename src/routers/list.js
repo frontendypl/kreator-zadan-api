@@ -20,4 +20,21 @@ router.post('/lists', auth, async(req, res)=>{
 
 })
 
+router.get('/lists', auth, async (req, res)=>{
+    try{
+        const lists = await List.find({owner: req.user._id})
+        res.send(lists)
+    }catch (e) {
+        res.status(400).send()
+    }
+})
+
+router.delete('/lists/:id', auth, async (req,res)=>{
+    const id = req.params.id
+
+    const list = await List.findOne({_id: id, owner: req.user._id})
+    await list.remove()
+    res.send(list)
+})
+
 module.exports = router
