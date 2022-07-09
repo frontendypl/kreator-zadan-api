@@ -2,6 +2,9 @@ const express = require('express')
 const List = require('../models/list')
 const auth = require('../middleware/auth')
 
+const Player = require('../models/player')
+//const Exercise = require('../models/exercise') //TODO
+
 const router = new express.Router()
 
 router.post('/lists', auth, async(req, res)=>{
@@ -32,7 +35,10 @@ router.get('/lists', auth, async (req, res)=>{
     }
 })
 
-router.get('/lists/:shortCode', async (req, res)=>{
+/**
+ * shortCode validation
+ */
+router.get('/lists/validation/:shortCode', async (req, res)=>{
 
     try{
         const list = await List.findOne({shortCode: req.params.shortCode})
@@ -41,6 +47,21 @@ router.get('/lists/:shortCode', async (req, res)=>{
         }else{
             res.status(404).send({error: 'Niepoprawny kod'})
         }
+    }catch (e) {
+        res.status(500).send()
+    }
+
+})
+
+/**
+ * get lists data(players and exercises)
+ */
+router.get('/lists/:listId', auth, async (req, res)=>{
+
+    try{
+        const players = await Player.find({listId: req.params.listId})
+        // const exercises = await Exercise.find({listId: req.params.list}) //TODO
+        res.send(players)
     }catch (e) {
         res.status(500).send()
     }

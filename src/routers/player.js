@@ -25,25 +25,25 @@ router.post('/players', async (req, res)=>{
     }
 })
 
-router.patch('/players/:id', async (req, res)=>{
-    const id = req.params.id
-    const updates = Object.keys(req.body)
-
-    try{
-        const player = await Player.findById(id)
-
-        if(!player){
-            return res.status(404).send()
-        }
-
-        updates.forEach(key=> player[key] = req.body[key])
-        const playerUpdated = await player.save()
-        res.send(playerUpdated)
-    }catch (e) {
-        res.status(500).send(e)
-    }
-
-})
+// router.patch('/players/:id', async (req, res)=>{
+//     const id = req.params.id
+//     const updates = Object.keys(req.body)
+//
+//     try{
+//         const player = await Player.findById(id)
+//
+//         if(!player){
+//             return res.status(404).send()
+//         }
+//
+//         updates.forEach(key=> player[key] = req.body[key])
+//         const playerUpdated = await player.save()
+//         res.send(playerUpdated)
+//     }catch (e) {
+//         res.status(500).send(e)
+//     }
+//
+// })
 
 
 
