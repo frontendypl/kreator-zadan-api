@@ -4,7 +4,7 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 
-const gameRouter = require('./src/routers/players')
+const playerRouter = require('./src/routers/player')
 const userRouter = require('./src/routers/user')
 const listRouter = require('./src/routers/list')
 
@@ -29,7 +29,7 @@ app.use(bodyParser.urlencoded({
 }))
 app.use(cors())
 
-app.use(gameRouter)
+app.use(playerRouter)
 app.use(userRouter)
 app.use(listRouter)
 

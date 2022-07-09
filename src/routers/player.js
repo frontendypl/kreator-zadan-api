@@ -14,14 +14,14 @@ router.get('/exercise', (req, res)=>{
 })
 
 router.post('/players', async (req, res)=>{
-    const player = new Player()
-    player.listId = req.body.listId
+    const player = new Player(req.body)
+    // player.listId = req.body.listId
     try {
         const newPlayer = await player.save()
         res.status(201).send(newPlayer)
     }catch (e) {
         console.log(e)
-        res.status(400).send({error: 'Niepoprawny kod'})
+        res.status(400).send(e)
     }
 })
 

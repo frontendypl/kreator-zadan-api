@@ -16,8 +16,8 @@ const playerSchema = new mongoose.Schema({
         type: String,
         trim: true,
         maxLength: [30, 'Maksymalnie 30 znaków'],
-        minLength: [1, 'Pole nie może być puste.']
-        // required: true,
+        minLength: [1, 'Pole nie może być puste.'],
+        required: [true, 'To pole nie może być puste'],
         // validate(value){
         //
         // }
