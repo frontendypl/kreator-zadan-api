@@ -4,7 +4,7 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 
-const gameRouter = require('./src/routers/game')
+const gameRouter = require('./src/routers/players')
 const userRouter = require('./src/routers/user')
 const listRouter = require('./src/routers/list')
 

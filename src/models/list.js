@@ -11,6 +11,12 @@ const listSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: 'User'
+    },
+    shortCode: {
+        type: String,
+        required: true,
+        immutable: true,
+        unique: [true, 'Spróbuj ponownie.']
     }
 }, {
     timestamps: true

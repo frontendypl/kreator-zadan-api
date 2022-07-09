@@ -7,9 +7,10 @@ const playerSchema = new mongoose.Schema({
      * może by sie dało ustawić ilość znaków dla listId, to by ułatwiło zadanie.
      */
     listId: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
         trim: true,
-        required: true
+        required: true,
+        ref: 'List'
     },
     name: {
         type: String,
