@@ -7,6 +7,7 @@ const bodyParser = require('body-parser')
 const playerRouter = require('./src/routers/player')
 const userRouter = require('./src/routers/user')
 const listRouter = require('./src/routers/list')
+const imageRouter = require('./src/routers/image')
 
 const port = process.env.PORT || 2000 //TODO nie wiem jak z tym portem na serwerze 'atthost'
 
@@ -32,6 +33,7 @@ app.use(cors())
 app.use(playerRouter)
 app.use(userRouter)
 app.use(listRouter)
+app.use(imageRouter)
 
 app.listen(port, ()=>{
     console.log('App is running on port', port)

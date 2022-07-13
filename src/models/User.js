@@ -3,7 +3,7 @@ const validator = require('validator')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
-const Player = require('./player')
+const Player = require('./Player')
 
 /**
  * todo: desc

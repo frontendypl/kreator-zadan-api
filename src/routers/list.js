@@ -1,8 +1,8 @@
 const express = require('express')
-const List = require('../models/list')
+const List = require('../models/List')
 const auth = require('../middleware/auth')
 
-const Player = require('../models/player')
+const Player = require('../models/Player')
 //const Exercise = require('../models/exercise') //TODO
 
 const router = new express.Router()
