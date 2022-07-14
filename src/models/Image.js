@@ -3,10 +3,16 @@ const mongoose = require('mongoose')
 const imageSchema = new mongoose.Schema({
         src: {
             type: Buffer || String,
-            required: true,
             trim: true
         },
-
+        url: {
+            type: String,
+            trim: true
+        },
+        srcType: {
+            type: String,
+            required: true,
+        },
         owner: {
             type: mongoose.Schema.Types.ObjectId,
             required: true,
