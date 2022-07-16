@@ -7,7 +7,7 @@ const imageSchema = new mongoose.Schema({
         },
         url: {
             type: String,
-            trim: true
+            trim: true,
         },
         srcType: {
             type: String,
