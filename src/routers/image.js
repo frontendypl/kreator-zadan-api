@@ -112,6 +112,28 @@ router.get('/images', auth, async(req, res)=>{
 
 })
 
+router.delete('/images/:id', auth, async(req, res)=>{
+    try{
+        const image = await Image.findById(req.params.id)
+        if(!image){
+            return res.status(404).send({
+                errors: {
+                    unknown: 'nie odnaleziono'
+                }
+            })
+        }
+        await image.remove()
+        res.send(image)
+
+    }catch (e) {
+        res.status(500).send({
+            errors: {
+                unknown: 'coś poszło nie tak'
+            }
+        })
+    }
+})
+
 router.get('/images/test', async (req, res)=>{
 
     const image = await Image.findById('62d01429ee6196df7af6a525')
