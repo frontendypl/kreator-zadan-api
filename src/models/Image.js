@@ -2,8 +2,14 @@ const mongoose = require('mongoose')
 
 const imageSchema = new mongoose.Schema({
         src: {
-            type: Buffer || String,
+            type: String,
             trim: true
+        },
+        mimetype: {
+            type: String
+        },
+        originalname: {
+          type: String
         },
         url: {
             type: String,

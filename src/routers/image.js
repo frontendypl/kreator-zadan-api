@@ -38,6 +38,7 @@ const imageValidation = (img)=>{
 
 router.post('/images', auth, upload.single('image'), async(req, res)=>{
 //TODO 'sharp' - resize, minify images etc.
+
     if(!req.body.url && !req.file){
         return res.status(500).send({errors: {
                 "fileInput": {
@@ -72,7 +73,9 @@ router.post('/images', auth, upload.single('image'), async(req, res)=>{
     })
 
     if(req.body.srcType === 'buffer'){
-        image.src = req.file.buffer
+        image.src = req.file.buffer.toString('base64')
+        image.mimetype = req.file.mimetype
+        image.originalname = req.file.originalname
     }else{
         image.url = req.body.url
     }
@@ -92,7 +95,22 @@ router.post('/images', auth, upload.single('image'), async(req, res)=>{
 
 })
 
+router.get('/images', auth, async(req, res)=>{
 
+    try{
+        const images = await Image.find({owner: req.user._id})
+        res.send(images)
+    }catch (e) {
+        res.status(500).send({
+            errors: {
+                urlInput: {
+                    unknown: 'Coś poszło nie tak.'
+                }
+            }
+        })
+    }
+
+})
 
 router.get('/images/test', async (req, res)=>{
 
