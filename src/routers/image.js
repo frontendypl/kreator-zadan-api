@@ -98,7 +98,7 @@ router.post('/images', auth, upload.single('image'), async(req, res)=>{
 router.get('/images', auth, async(req, res)=>{
 
     try{
-        const images = await Image.find({owner: req.user._id})
+        const images = await Image.find({owner: req.user._id}).sort({updatedAt: -1})
         res.send(images)
     }catch (e) {
         res.status(500).send({
