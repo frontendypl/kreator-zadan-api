@@ -39,6 +39,6 @@ const exerciseSchema = new mongoose.Schema({
     timestamps: true
 })
 
-const Image = new mongoose.model('Exercise', exerciseSchema)
+const Exercise = mongoose.model('Exercise', exerciseSchema)
 
-module.exports = Image
+module.exports = Exercise

@@ -9,6 +9,7 @@ const userRouter = require('./src/routers/user')
 const listRouter = require('./src/routers/list')
 const imageRouter = require('./src/routers/image')
 const exerciseRouter = require('./src/routers/exercise')
+const answerRouter = require('./src/routers/answer')
 
 const port = process.env.PORT || 2000 //TODO nie wiem jak z tym portem na serwerze 'atthost'
 
@@ -36,6 +37,7 @@ app.use(userRouter)
 app.use(listRouter)
 app.use(imageRouter)
 app.use(exerciseRouter)
+app.use(answerRouter)
 
 app.listen(port, ()=>{
     console.log('App is running on port', port)

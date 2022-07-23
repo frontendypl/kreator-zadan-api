@@ -21,4 +21,18 @@ router.post('/exercises', auth, async (req, res)=>{
 
 })
 
+/**
+ * Get all exerices
+ */
+router.get('/exercises', auth, async (req, res)=>{
+
+})
+
+/**
+ * Get all exerices
+ */
+router.get('/exercises', auth, async (req, res)=>{
+
+})
+
 module.exports = router

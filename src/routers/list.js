@@ -3,7 +3,7 @@ const List = require('../models/List')
 const auth = require('../middleware/auth')
 
 const Player = require('../models/Player')
-//const Exercise = require('../models/exercise') //TODO
+const Exercise = require('../models/Exercise')
 
 const router = new express.Router()
 
@@ -54,16 +54,29 @@ router.get('/lists/validation/:shortCode', async (req, res)=>{
 })
 
 /**
- * get lists data(players and exercises)
+ * get lists player
  */
-router.get('/lists/:listId', auth, async (req, res)=>{
+router.get('/lists/:listId/players', auth, async (req, res)=>{
 
     try{
         const players = await Player.find({listId: req.params.listId})
-        // const exercises = await Exercise.find({listId: req.params.list}) //TODO
         res.send(players)
     }catch (e) {
-        res.status(500).send()
+        res.status(500).send(e)
+    }
+
+})
+
+/**
+ * get lists exercises
+ */
+router.get('/lists/:listId/exercises', auth, async (req, res)=>{
+
+    try{
+        const exercises = await Exercise.find({listId: req.params.list}) //TODO
+        res.send(exercises)
+    }catch (e) {
+        res.status(500).send(e)
     }
 
 })
