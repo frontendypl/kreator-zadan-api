@@ -3,15 +3,15 @@ const Player = require('../models/Player')
 
 const router = new express.Router()
 
-router.get('/exercise', (req, res)=>{
-    res.send({
-        id: 'sdv45345',
-        img: '',
-        imgLink: 'https://images.pexels.com/photos/1819656/pexels-photo-1819656.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-        question: 'Jaką nazwe nosi to zjawisko?',
-        answers: [{id:1,text: 'Tęcza'},{id:2,text: 'Szron'},{id:3,text: 'Zorza polarna'},]
-    })
-})
+// router.get('/exercise', (req, res)=>{
+//     res.send({
+//         id: 'sdv45345',
+//         img: '',
+//         imgLink: 'https://images.pexels.com/photos/1819656/pexels-photo-1819656.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+//         question: 'Jaką nazwe nosi to zjawisko?',
+//         answers: [{id:1,text: 'Tęcza'},{id:2,text: 'Szron'},{id:3,text: 'Zorza polarna'},]
+//     })
+// })
 
 router.post('/players', async (req, res)=>{
     const player = new Player(req.body)

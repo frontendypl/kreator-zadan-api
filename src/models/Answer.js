@@ -11,11 +11,14 @@ const answerSchema = new mongoose.Schema({
         ref: 'Exercise',
         required: true
     },
-    userAnswerId: {
+    //TODO // 'userAnswerId' dla zadania 'exerciseId' powinno mieć isCorrect: true
+    userAnswerId: { //czy nie powinno być playerAnswerId
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         // ref: 'Exrcise.answers' //TODO
     },
+},{
+    timestamps: true
 })
 
 const Answer = mongoose.model('Answer', answerSchema)

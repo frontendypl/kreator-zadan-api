@@ -22,7 +22,8 @@ const playerSchema = new mongoose.Schema({
         //
         // }
     },
-
+},{
+    timestamps: true
 })
 
 const Player = mongoose.model('Player', playerSchema)

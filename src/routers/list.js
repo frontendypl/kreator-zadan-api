@@ -4,6 +4,7 @@ const auth = require('../middleware/auth')
 
 const Player = require('../models/Player')
 const Exercise = require('../models/Exercise')
+const Answer = require('../models/Answer')
 
 const router = new express.Router()
 
@@ -38,17 +39,21 @@ router.get('/lists', auth, async (req, res)=>{
 /**
  * shortCode validation
  */
-router.get('/lists/validation/:shortCode', async (req, res)=>{
+router.post('/lists/validation', async (req, res)=>{
 
     try{
-        const list = await List.findOne({shortCode: req.params.shortCode})
+        const list = await List.findOne({shortCode: req.body.shortCode})
         if(list){
             res.send(list)
         }else{
-            res.status(404).send({error: 'Niepoprawny kod'})
+            res.status(404).send({errors: {
+                    "shortCodeInput": {
+                        message: "Niepoprawny kod"
+                    }
+                }})
         }
     }catch (e) {
-        res.status(500).send()
+        res.status(500).send(e)
     }
 
 })
@@ -73,7 +78,8 @@ router.get('/lists/:listId/players', auth, async (req, res)=>{
 router.get('/lists/:listId/exercises', auth, async (req, res)=>{
 
     try{
-        const exercises = await Exercise.find({listId: req.params.list}) //TODO
+        console.log('tutaj', req.params.listId)
+        const exercises = await Exercise.find({list: req.params.listId}) //TODO
         res.send(exercises)
     }catch (e) {
         res.status(500).send(e)
@@ -107,5 +113,37 @@ router.patch('/lists/:id', auth, async (req, res)=>{
         res.status(404).send()
     }
 })
+
+/**
+ * return current exercises for user,
+ * filter solved ones
+ */
+router.get('/lists/:listId/:playerId/exercises', async (req, res)=>{
+    //TODO sprobować stworzyć w modelu wirtualną property isCorrect i pobierac tylko poprawne
+
+    try{
+        const exercises = await Exercise.find({list: req.params.listId})
+        // const userAnswers = await Answer.find({playerId: req.params.playerId})
+        res.send(exercises[0])
+    }catch (e) {
+        res.status(500).send()
+    }
+
+})
+
+// /** //TODO raczej dla wszystkie answersy dla listy
+//  * return all users answers
+//  * toDo // dodatkowo w parametrach opcja filtracji, sortowania itp
+//  */
+// router.get('/lists/:listId/:playerId/answers', async (req, res)=>{
+//     try{
+//         const answers = await Answer.find({
+//             playerId: req.params.listId
+//         })
+//         res.send(answers)
+//     }catch (e) {
+//         res.status(500).send(e)
+//     }
+// })
 
 module.exports = router
