@@ -1,6 +1,10 @@
 const mongoose = require('mongoose')
 
 const answerSchema = new mongoose.Schema({
+    isCorrect: {
+        type: Boolean,
+        required: true
+    },
     playerId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Player',

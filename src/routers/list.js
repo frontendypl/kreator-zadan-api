@@ -1,7 +1,9 @@
 const express = require('express')
-const List = require('../models/List')
+
 const auth = require('../middleware/auth')
 
+const List = require('../models/List')
+const Image = require('../models/Image')
 const Player = require('../models/Player')
 const Exercise = require('../models/Exercise')
 const Answer = require('../models/Answer')
@@ -115,6 +117,7 @@ router.patch('/lists/:id', auth, async (req, res)=>{
 })
 
 /**
+ * TODO przenieść do routers/exercise.js
  * return current exercises for user,
  * filter solved ones
  */
@@ -122,13 +125,31 @@ router.get('/lists/:listId/:playerId/exercises', async (req, res)=>{
     //TODO sprobować stworzyć w modelu wirtualną property isCorrect i pobierac tylko poprawne
 
     try{
-        const exercises = await Exercise.find({list: req.params.listId})
+        let exercises = await Exercise.find({list: req.params.listId})
+        const answers = await Answer.find({playerId: req.params.playerId})
+        let completed= false;
+
+        answers.forEach(answer=>{
+            if(!answer.isCorrect) return
+            exercises = exercises.filter(exercise=>{
+                return (exercise._id.toString() !== answer.exerciseId.toString())
+            })
+        })
+
+        if(!exercises.length){
+            // exercises = await Exercise.find({list: req.params.listId})
+            completed = true
+            return res.send({completed})
+        }
+        const imageObject = exercises[0].image ? await Image.findOne(exercises[0].image) : null
+        console.log(exercises[0].image)
+
         // const userAnswers = await Answer.find({playerId: req.params.playerId})
-        res.send(exercises[0])
+        res.send({completed, content: exercises[0], imageObject})
     }catch (e) {
+        console.log(e)
         res.status(500).send()
     }
-
 })
 
 // /** //TODO raczej dla wszystkie answersy dla listy
