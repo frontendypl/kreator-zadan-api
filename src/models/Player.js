@@ -1,5 +1,8 @@
 const mongoose = require('mongoose')
 const {model} = require("mongoose");
+const bcrypt = require("bcryptjs");
+
+const Answer = require('./Answer')
 
 const playerSchema = new mongoose.Schema({
     /** list Id jest wymagan na początku, trzeba to bedzie poprawić pod realne id gdy taka kolekcja powstanie
@@ -24,6 +27,17 @@ const playerSchema = new mongoose.Schema({
     },
 },{
     timestamps: true
+})
+
+// playerSchema.pre('findOneAndDelete', async function(next){
+//     const player = this
+//     await Answer.deleteMany({playerId: player._id})
+//
+//     next()
+// })
+
+playerSchema.post('findOneAndDelete',async player=>{
+    await Answer.deleteMany({playerId: player._id})
 })
 
 const Player = mongoose.model('Player', playerSchema)

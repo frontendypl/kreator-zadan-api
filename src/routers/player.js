@@ -25,31 +25,18 @@ router.post('/players', async (req, res)=>{
     }
 })
 
-// router.patch('/players/:id', async (req, res)=>{
-//     const id = req.params.id
-//     const updates = Object.keys(req.body)
-//
-//     try{
-//         const player = await Player.findById(id)
-//
-//         if(!player){
-//             return res.status(404).send()
-//         }
-//
-//         updates.forEach(key=> player[key] = req.body[key])
-//         const playerUpdated = await player.save()
-//         res.send(playerUpdated)
-//     }catch (e) {
-//         res.status(500).send(e)
-//     }
-//
-// })
+router.delete('/players/:id', async(req, res)=>{
+
+    try{
+        const deletedPlayer = await Player.findByIdAndDelete(req.params.id)
+        console.log({deletedPlayer})
+        res.send(deletedPlayer)
+    }catch (e) {
+        res.status(500).send(e)
+    }
+
+})
 
 
-
-
-/** Przyszle routy: */
-/** POST wyslij imie, return uderId, token */
-/** POST wyslij odpowiedz, return błąd lub nowe zadanie, przekierowanie itp*/
 
 module.exports = router
