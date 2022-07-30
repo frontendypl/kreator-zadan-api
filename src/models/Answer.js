@@ -1,6 +1,10 @@
 const mongoose = require('mongoose')
 
 const answerSchema = new mongoose.Schema({
+    listId: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true
+    },
     isCorrect: {
         type: Boolean,
         required: true

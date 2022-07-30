@@ -1,4 +1,5 @@
 const express = require('express')
+const validator = require('validator')
 const User = require('../models/User')
 
 const router = new express.Router()
@@ -33,18 +34,48 @@ router.post('/users', async (req, res)=>{
 })
 
 router.post('/users/login', async (req, res)=>{
+
+    const isValidEmail = validator.isEmail(req.body.email)
     try{
         const user = await User.findByCredentials(req.body.email, req.body.password)
         const token = await user.generateAuthToken()
         res.send({user, token})
     }catch (e) {
-        res.status(404).send({
-            errors: {
-                "email": {
-                    message: "Niepoprawne hasło."
+
+        if(!isValidEmail){
+            e.errors = {
+                ...e.errors,
+                email: {
+                    message: 'Niepoprawny adres email.'
                 }
             }
-        })
+        }
+
+        if(req.body.email === ''){
+            e.errors = {
+                ...e.errors,
+                email: {
+                    message: 'Uzupełnij email.'
+                }
+            }
+        }
+        if(req.body.password === ''){
+            e.errors = {
+                ...e.errors,
+                password: {
+                    message: 'Podaj hasło.'
+                }
+            }
+        }
+        if(req.body.email && req.body.password && isValidEmail){
+            e.errors = {
+                ...e.errors,
+                other: {
+                    message:  e.message
+                }
+            }
+        }
+        res.status(500).send(e)
     }
 })
 

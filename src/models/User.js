@@ -27,12 +27,12 @@ const userSchema = new mongoose.Schema({
         required: [true, 'Uzupełnij hasło'],
         minLength: [5, 'Hasło musi mieć minimum 5 znaków']
     },
-    role: {
-      type: String,
-      required: true,
-      immutable: true,
-      default: 'user'
-    },
+    // role: {
+    //   type: String,
+    //   required: true,
+    //   immutable: true,
+    //   default: 'user'
+    // },
     tokens: [{
         token: {
             type: String,
@@ -89,12 +89,12 @@ userSchema.pre('save', async function(next){
 userSchema.statics.findByCredentials = async (email, password)=>{
     const user = await User.findOne({email})
 
-    if(!user){
-        throw new Error('Unable to login, no user')
+    if (!user) {
+        throw new Error('Nie ma takiego użytkownika.')
     }
     const isMatch = await bcrypt.compare(password, user.password)
     if(!isMatch){
-        throw new Error('Unable to login, isMatch - false')
+        throw new Error('Niepoprawne hasło')
     }
     return user
 

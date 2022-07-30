@@ -80,7 +80,6 @@ router.get('/lists/:listId/players', auth, async (req, res)=>{
 router.get('/lists/:listId/exercises', auth, async (req, res)=>{
 
     try{
-        console.log('tutaj', req.params.listId)
         const exercises = await Exercise.find({list: req.params.listId}) //TODO
         res.send(exercises)
     }catch (e) {

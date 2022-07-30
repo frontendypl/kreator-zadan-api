@@ -21,13 +21,13 @@ const exerciseSchema = new mongoose.Schema({
     },
     content: {
         type: String,
-        required: true,
+        required: [true, 'Wpisz treść zdania. Np "Co widzisz na obrazku?"'],
         trim: true
     },
     answers: [{
         text: {
             type: String,
-            required: true
+            required: [true, 'Uzupełnij tekst pytania.'],
         },
         isCorrect: {
             type: Boolean,
