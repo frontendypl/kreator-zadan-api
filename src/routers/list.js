@@ -106,14 +106,20 @@ router.delete('/lists/:id', auth, async (req,res)=>{
 router.patch('/lists/:id', auth, async (req, res)=>{
     const id = req.params.id
     const updates = Object.keys(req.body)
-    const list = await List.findOne({_id: id, owner: req.user._id})
-    if(list){
-        updates.forEach(key=>list[key] = req.body[key])
-        await list.save()
-        res.send(list)
-    }else{
-        res.status(404).send()
+
+    try{
+        const list = await List.findOne({_id: id, owner: req.user._id})
+        if(list){
+            updates.forEach(key=>list[key] = req.body[key])
+            await list.save()
+            res.send(list)
+        }else{
+            res.status(404).send()
+        }
+    }catch (e) {
+        res.status(500).send(e)
     }
+
 })
 
 /**

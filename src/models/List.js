@@ -5,7 +5,8 @@ const listSchema = new mongoose.Schema({
         type: String,
         trim: true,
         required: [true, 'Podaj nazwe listy.'],
-        minLength: 1
+        minLength: 1,
+        maxLength: [100, 'Maksymalnie 100 znaków.']
     },
     owner: {
         type: mongoose.Schema.Types.ObjectId,
