@@ -80,6 +80,7 @@ router.get('/lists/:listId/players', auth, async (req, res)=>{
 router.get('/lists/:listId/exercises', auth, async (req, res)=>{
 
     try{
+        console.log('tutaj', req.params.listId)
         const exercises = await Exercise.find({list: req.params.listId}) //TODO
         res.send(exercises)
     }catch (e) {
@@ -140,11 +141,11 @@ router.get('/lists/:listId/:playerId/exercises', async (req, res)=>{
             completed = true
             return res.send({completed})
         }
-        const imageObject = exercises[0].image ? await Image.findOne(exercises[0].image) : null
-        console.log(exercises[0].image)
 
-        // const userAnswers = await Answer.find({playerId: req.params.playerId})
-        res.send({completed, content: exercises[0], imageObject})
+        console.log('tutaj', exercises[0].image.toString())
+        const imageObject = exercises[0].image.toString() ? await Image.findById(exercises[0].image) : null
+
+        res.send({completed, content: exercises[0], imageObject: imageObject})
     }catch (e) {
         console.log(e)
         res.status(500).send()
