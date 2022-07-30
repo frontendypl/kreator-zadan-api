@@ -14,22 +14,44 @@ router.post('/users', async (req, res)=>{
     const user = new User(req.body)
 
     const isUserAlreadyExists = await User.findOne({email: user.email})
-    console.log({isUserAlreadyExists})
-    if(isUserAlreadyExists) return res.status(409).send({
-        errors: {
-            "email": {
-                message: "Konto już istnieje. Zaloguj się."
-            }
-        }
-    })
+    const passwordRepeatCorrectly = req.body.password === req.body.repeatPassword
 
     try{
+        if(isUserAlreadyExists) {
+            throw new Error('Konto o podanym adresie email już istnieje.')
+        }
+        if(!passwordRepeatCorrectly) {
+            throw new Error('Hasła różnią się.')
+        }
+
         const token = await user.generateAuthToken()
         const newUser = await user.save()
         res.status(201).send({user: newUser,token})
     }catch (e) {
-        console.log(e)
-        res.status(400).send(e)
+        if(isUserAlreadyExists) {
+            e.errors = {
+                ...e.errors,
+                email: {
+                    message: e.message
+                }
+            }
+        }
+        if(!isUserAlreadyExists && !passwordRepeatCorrectly) {
+            e.errors = {
+                ...e.errors,
+                repeatPassword: {
+                    message: e.message
+                }
+            }
+        }
+
+        // e.errors = {
+        //     ...e.errors,
+        //     other: {
+        //         message: e.message
+        //     }
+        // }
+        res.status(500).send(e)
     }
 })
 
