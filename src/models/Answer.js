@@ -1,29 +1,24 @@
 const mongoose = require('mongoose')
 
 const answerSchema = new mongoose.Schema({
-    listId: {
+    list: {
         type: mongoose.Schema.Types.ObjectId,
         required: true
     },
-    isCorrect: {
-        type: Boolean,
-        required: true
-    },
-    playerId: {
+    player: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Player',
         required: true
     },
-    exerciseId: {
+    exercise: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Exercise',
         required: true
     },
-    //TODO // 'userAnswerId' dla zadania 'exerciseId' powinno mieć isCorrect: true
-    userAnswerId: { //czy nie powinno być playerAnswerId
+    answerOption: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        // ref: 'Exrcise.answers' //TODO
+        ref: 'AnswerOption',
+        required: true
     },
 },{
     timestamps: true

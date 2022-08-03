@@ -1,44 +1,74 @@
 const express = require('express')
 const Exercise = require('../models/Exercise')
+const AnswerOption = require('../models/AnswerOption')
 const auth = require('../middleware/auth')
 
 const router = new express.Router()
 
 router.post('/exercises', auth, async (req, res)=>{
 
-    const exercise = new Exercise(req.body)
-    exercise.owner = req.user._id
+    const errors = {}
+    const answerOptions = req.body.answers
 
-    // TODO sprawdzenie czy zaznaczono prawidłową odpowiedź !!!!!!
-    console.log(req.body.answers)
-    const isOneAnswerCorrect = req.body.answers.find(answer=>answer.isCorrect)
+    if(!answerOptions.length){
+        errors.noAnswers = {
+                message: 'Dodaj przynajmniej jedną odpowiedź'
+            }
+
+    }else{
+        let isAnyCorrect = false
+        let isAnyEmpty = false
+        answerOptions.forEach(answer=>{
+            if(answer.isCorrect){
+                isAnyCorrect = true
+            }
+            if(!isAnyEmpty && answer.text === ''){
+                isAnyEmpty = true
+            }
+
+        })
+        if(!isAnyCorrect){
+            errors.anyCorrect= {
+                    message: 'Zaznacz prawidłową odpowiedź.'
+                }
+        }
+        if(isAnyEmpty){
+            errors.anyEmpty= {
+                    message: 'Uzupełnij tekst w odpowiedziach.'
+                }
+
+        }
+    }
+
+    const exercise = new Exercise(req.body)
 
     try{
         const newExercise = await exercise.save()
+        if(!Object.keys(errors).length){
+            const answerOptions = await AnswerOption.insertMany(req.body.answers)
 
-        if (!isOneAnswerCorrect) {
-            await newExercise.remove()
-            return res.status(500).send({
-                errors: {
-                    isOneCorrect: {
-                        message: 'Zaznacz poprawną odpowiedź.'
-                    }
-                }
+            answerOptions.forEach(option=>{
+                exercise.answerOptions.push(option._id)
             })
+
+            await newExercise.save()
+
+            res.status(201).send(newExercise)
+        }else{
+            await newExercise.remove()
+            throw new Error('błędy w odpowiedziach')
         }
 
-        res.status(201).send(newExercise)
     }catch (e) {
-        if (!isOneAnswerCorrect) {
-            e.errors = {
-                ...e.errors,
-                isOneCorrect: {
-                    message: 'Zaznacz poprawną odpowiedź. (pole obok prawidłowej odpowiedzi)'
-                }}
+        e.errors = {
+            ...e.errors,
+            ...errors
         }
+
         res.status(500).send(e)
-        console.log({e})
+
     }
+
 
 })
 

@@ -132,13 +132,18 @@ router.get('/lists/:listId/:playerId/exercises', async (req, res)=>{
 
     try{
         let exercises = await Exercise.find({list: req.params.listId})
-        const answers = await Answer.find({playerId: req.params.playerId})
+            .populate('answerOptions')
+
+        console.log({exercises})
+
+        const answers = await Answer.find({player: req.params.playerId})
+            .populate('answerOption')
         let completed= false;
 
         answers.forEach(answer=>{
-            if(!answer.isCorrect) return
+            if(!answer.answerOption.isCorrect) return
             exercises = exercises.filter(exercise=>{
-                return (exercise._id.toString() !== answer.exerciseId.toString())
+                return (exercise._id.toString() !== answer.exercise.toString())
             })
         })
 
@@ -148,8 +153,8 @@ router.get('/lists/:listId/:playerId/exercises', async (req, res)=>{
             return res.send({completed})
         }
 
-        console.log('tutaj', exercises[0].image.toString())
-        const imageObject = exercises[0].image.toString() ? await Image.findById(exercises[0].image) : null
+        console.log('tutaj', exercises[0].image?.toString())
+        const imageObject = exercises[0].image?.toString() ? await Image.findById(exercises[0].image) : null
 
         res.send({completed, content: exercises[0], imageObject: imageObject})
     }catch (e) {

@@ -10,29 +10,23 @@ const exerciseSchema = new mongoose.Schema({
         ref: 'List',
         required: true
     },
-    owner: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
-    },
+    // owner: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'User',
+    //     required: true
+    // },
     name: {
         type: String,
-        required: true
+        required: [true, 'Nazwij zadanie.']
     },
     content: {
         type: String,
         required: [true, 'Wpisz treść zdania. Np "Co widzisz na obrazku?"'],
         trim: true
     },
-    answers: [{
-        text: {
-            type: String,
-            required: [true, 'Uzupełnij tekst pytania.'],
-        },
-        isCorrect: {
-            type: Boolean,
-            default: false
-        }
+    answerOptions: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'AnswerOption',
     }]
 },{
     timestamps: true
