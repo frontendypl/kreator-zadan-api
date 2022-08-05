@@ -20,12 +20,21 @@ router.post('/answers', async (req, res)=>{
 
 router.get('/lists/:id/answers', async (req, res)=>{
         try{
-            const answers = await Answer
-                .find({listId: req.params.id})
-                .populate('playerId')
-                .populate('exerciseId')
-                .populate('answerOption')
 
+            console.log(req.params.id)
+
+            const answers = await Answer
+                .find({list: req.params.id})
+                .populate('player')
+                .populate('exercise')
+                .populate('answerOption')
+                .populate({
+                    path: 'exercise',
+                    populate: {
+                        path: 'answerOptions'
+                    }
+                })
+                .sort({'createdAt':-1})
             res.send(answers)
         }catch (e) {
             res.status(500).send(e)
