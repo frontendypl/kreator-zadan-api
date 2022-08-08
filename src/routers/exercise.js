@@ -5,6 +5,24 @@ const auth = require('../middleware/auth')
 
 const router = new express.Router()
 
+/**
+ * get lists exercises
+ */
+router.get('/lists/:listId/exercises', auth, async (req, res)=>{
+
+    try{
+        console.log('tutaj', req.params.listId)
+        const exercises = await Exercise.find({list: req.params.listId})
+            .populate('image')
+            .populate('answerOptions')
+
+        res.send(exercises)
+    }catch (e) {
+        res.status(500).send(e)
+    }
+
+})
+
 router.post('/exercises', auth, async (req, res)=>{
 
     const errors = {}

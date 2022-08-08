@@ -21,8 +21,6 @@ router.post('/answers', async (req, res)=>{
 router.get('/lists/:id/answers', async (req, res)=>{
         try{
 
-            console.log(req.params.id)
-
             const answers = await Answer
                 .find({list: req.params.id})
                 .populate('player')
@@ -39,6 +37,19 @@ router.get('/lists/:id/answers', async (req, res)=>{
         }catch (e) {
             res.status(500).send(e)
         }
+})
+
+router.get('/players/:id/answers', async (req, res)=>{
+    try{
+
+        const answers = await Answer
+            .find({player: req.params.id})
+            .populate('answerOption')
+
+        res.send(answers)
+    }catch (e) {
+        res.status(500).send(e)
+    }
 })
 
 module.exports = router

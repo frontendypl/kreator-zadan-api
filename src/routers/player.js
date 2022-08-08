@@ -1,17 +1,25 @@
 const express = require('express');
 const Player = require('../models/Player')
+const auth = require("../middleware/auth");
 
 const router = new express.Router()
 
-// router.get('/exercise', (req, res)=>{
-//     res.send({
-//         id: 'sdv45345',
-//         img: '',
-//         imgLink: 'https://images.pexels.com/photos/1819656/pexels-photo-1819656.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-//         question: 'Jaką nazwe nosi to zjawisko?',
-//         answers: [{id:1,text: 'Tęcza'},{id:2,text: 'Szron'},{id:3,text: 'Zorza polarna'},]
-//     })
-// })
+/**
+ * get players list
+ */
+router.get('/lists/:listId/players', auth, async (req, res)=>{
+
+    try{
+        const players = await Player
+            .find({listId: req.params.listId})
+            .sort({'createdAt':-1})
+
+        res.send(players)
+    }catch (e) {
+        res.status(500).send(e)
+    }
+
+})
 
 router.post('/players', async (req, res)=>{
     const player = new Player(req.body)

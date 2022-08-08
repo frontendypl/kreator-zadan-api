@@ -60,35 +60,6 @@ router.post('/lists/validation', async (req, res)=>{
 
 })
 
-/**
- * get lists player
- */
-router.get('/lists/:listId/players', auth, async (req, res)=>{
-
-    try{
-        const players = await Player.find({listId: req.params.listId})
-        res.send(players)
-    }catch (e) {
-        res.status(500).send(e)
-    }
-
-})
-
-/**
- * get lists exercises
- */
-router.get('/lists/:listId/exercises', auth, async (req, res)=>{
-
-    try{
-        console.log('tutaj', req.params.listId)
-        const exercises = await Exercise.find({list: req.params.listId}) //TODO
-        res.send(exercises)
-    }catch (e) {
-        res.status(500).send(e)
-    }
-
-})
-
 router.delete('/lists/:id', auth, async (req,res)=>{
     const id = req.params.id
 
