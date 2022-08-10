@@ -36,11 +36,13 @@ const playerSchema = new mongoose.Schema({
 //     next()
 // })
 
-playerSchema.post('findOneAndDelete',async player=>{
+playerSchema.post(['deleteMany', 'deleteOne', 'findOneAndDelete'],async player=>{
 
-    // await Answer.deleteMany({playerId: player._id}) // TODO przy błędzie, playerId nie ma w modelu, usunął wszystkie odpowiedzi wszystkich playerów
-    //  ????
-    await Answer.deleteMany({player: player._id})
+    try{
+        await Answer.deleteMany({player: player._id})
+    }catch (e) {
+        console.log(e)
+    }
 
 })
 

@@ -1,5 +1,7 @@
 const express = require('express')
 const validator = require('validator')
+const auth = require('../middleware/auth')
+
 const User = require('../models/User')
 
 const router = new express.Router()
@@ -101,6 +103,15 @@ router.post('/users/login', async (req, res)=>{
     }
 })
 
-router.post
+router.delete('/users',auth, async (req, res)=>{
+
+    try{
+        const user = await User.findByIdAndDelete(req.user._id)
+        res.send('User removed')
+    }catch (e) {
+        res.status(500).send(e)
+    }
+
+})
 
 module.exports = router;

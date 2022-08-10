@@ -29,7 +29,7 @@ const listSchema = new mongoose.Schema({
 listSchema.post(['deleteMany', 'deleteOne', 'findOneAndDelete'],async list=>{
 
     try{
-        await Answer.deleteMany({list: list._id})
+        // await Answer.deleteMany({list: list._id})
         await Exercise.deleteMany({list: list._id})
         await Player.deleteMany({listId: list._id})
 

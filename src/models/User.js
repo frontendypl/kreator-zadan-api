@@ -3,7 +3,8 @@ const validator = require('validator')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
-const Player = require('./Player')
+const List = require('./List')
+const Image = require('./Image')
 
 /**
  * todo: desc
@@ -99,6 +100,17 @@ userSchema.statics.findByCredentials = async (email, password)=>{
     return user
 
 }
+
+userSchema.post(['deleteMany', 'deleteOne', 'findOneAndDelete'], async user=>{
+
+    try{
+        await List.deleteMany({owner: user._id})
+        await Image.deleteMany({owner: user._id})
+    }catch (e) {
+        console.log(e)
+    }
+
+})
 
 const User = mongoose.model('User', userSchema)
 
