@@ -63,6 +63,12 @@ router.post('/exercises', auth, async (req, res)=>{
     try{
         const newExercise = await exercise.save()
         if(!Object.keys(errors).length){
+
+            req.body.answers.forEach(answer=>{
+                console.log({answer})
+                answer.exercise = newExercise._id.toString()
+            })
+
             const answerOptions = await AnswerOption.insertMany(req.body.answers)
 
             answerOptions.forEach(option=>{

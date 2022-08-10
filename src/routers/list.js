@@ -61,15 +61,13 @@ router.post('/lists/validation', async (req, res)=>{
 })
 
 router.delete('/lists/:id', auth, async (req,res)=>{
-    const id = req.params.id
 
-    const list = await List.findOne({_id: id, owner: req.user._id})
-
-    if(list){
-        await list.remove()
-        res.send(list)
-    }else{
-        res.status(404).send()
+    try{
+        const deletedList = await List.findByIdAndDelete(req.params.id)
+        console.log({deletedList})
+        res.send(deletedList)
+    }catch (e) {
+        res.status(500).send(e)
     }
 
 })

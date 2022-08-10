@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const AnswerOption = require('./AnswerOption')
 
 const exerciseSchema = new mongoose.Schema({
     image: {
@@ -10,11 +11,6 @@ const exerciseSchema = new mongoose.Schema({
         ref: 'List',
         required: true
     },
-    // owner: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'User',
-    //     required: true
-    // },
     name: {
         type: String,
         required: [true, 'Nazwij zadanie.']
@@ -30,6 +26,16 @@ const exerciseSchema = new mongoose.Schema({
     }]
 },{
     timestamps: true
+})
+
+exerciseSchema.post(['deleteMany', 'deleteOne', 'findOneAndDelete'],async exercise=>{
+
+    try{
+        await AnswerOption.deleteMany({exercise: exercise._id})
+    }catch (e) {
+        console.log(e)
+    }
+
 })
 
 const Exercise = mongoose.model('Exercise', exerciseSchema)

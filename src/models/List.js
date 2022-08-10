@@ -1,4 +1,7 @@
 const mongoose = require('mongoose')
+const Answer = require("./Answer");
+const Exercise = require("./Exercise");
+const Player = require("./Player");
 
 const listSchema = new mongoose.Schema({
     name: {
@@ -21,6 +24,19 @@ const listSchema = new mongoose.Schema({
     }
 }, {
     timestamps: true
+})
+
+listSchema.post(['deleteMany', 'deleteOne', 'findOneAndDelete'],async list=>{
+
+    try{
+        await Answer.deleteMany({list: list._id})
+        await Exercise.deleteMany({list: list._id})
+        await Player.deleteMany({listId: list._id})
+
+    }catch (e) {
+        console.log({e})
+    }
+
 })
 
 const List = mongoose.model('List',listSchema)

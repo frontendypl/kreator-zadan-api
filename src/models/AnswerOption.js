@@ -8,6 +8,11 @@ const answerOptionSchema = new mongoose.Schema({
     isCorrect:{
         type: mongoose.Schema.Types.Boolean,
         default: false
+    },
+    exercise: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Exercise',
+        required: true,
     }
 },{
     timestamps: true
