@@ -28,12 +28,12 @@ const userSchema = new mongoose.Schema({
         required: [true, 'Uzupełnij hasło'],
         minLength: [5, 'Hasło musi mieć minimum 5 znaków']
     },
-    // role: {
-    //   type: String,
-    //   required: true,
-    //   immutable: true,
-    //   default: 'user'
-    // },
+    shortCode: {
+        type: String,
+        required: true,
+        unique: true,
+        length: 6
+    },
     tokens: [{
         token: {
             type: String,

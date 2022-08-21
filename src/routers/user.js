@@ -13,46 +13,52 @@ router.get('/users', async (req, res)=>{
 })
 
 router.post('/users', async (req, res)=>{
-    const user = new User(req.body)
+    const errors = {}
 
+    const user = new User(req.body)
     const isUserAlreadyExists = await User.findOne({email: user.email})
     const passwordRepeatCorrectly = req.body.password === req.body.repeatPassword
 
-    try{
-        if(isUserAlreadyExists) {
-            throw new Error('Konto o podanym adresie email już istnieje.')
-        }
-        if(!passwordRepeatCorrectly) {
-            throw new Error('Hasła różnią się.')
-        }
+    let shortCode = req.body.email.slice(0,2) +  Date.now().toString().slice(10)
+    user.shortCode = shortCode
+    let shortCodeDuplicate = await User.findOne({shortCode: user.shortCode})
+    /**
+     * Make longer shortcode if duplicated
+     */
+    if(shortCodeDuplicate){
+        shortCode = req.body.email.slice(0,2) +  Date.now().toString().slice(9)
+        user.shortCode = shortCode
+        shortCodeDuplicate = await User.findOne({shortCode: user.shortCode})
+    }
 
+    if(isUserAlreadyExists){
+        errors.email = {
+            message: 'Konto o podanym adresie email już istnieje.'
+        }
+    }
+    if(shortCodeDuplicate){
+        errors.other = {
+            message: 'Nieoczekiwany błąd. Spróbuj jeszcze raz'
+        }
+    }
+    if(!passwordRepeatCorrectly) {
+        errors.repeatPassword = {
+            message: 'Hasła różnią się.'
+        }
+    }
+
+    try{
         const token = await user.generateAuthToken()
+
         const newUser = await user.save()
         res.status(201).send({user: newUser,token})
     }catch (e) {
-        if(isUserAlreadyExists) {
-            e.errors = {
-                ...e.errors,
-                email: {
-                    message: e.message
-                }
-            }
-        }
-        if(!isUserAlreadyExists && !passwordRepeatCorrectly) {
-            e.errors = {
-                ...e.errors,
-                repeatPassword: {
-                    message: e.message
-                }
-            }
+
+        e.errors = {
+            ...e.errors,
+            ...errors
         }
 
-        // e.errors = {
-        //     ...e.errors,
-        //     other: {
-        //         message: e.message
-        //     }
-        // }
         res.status(500).send(e)
     }
 })
