@@ -19,14 +19,14 @@ router.post('/users', async (req, res)=>{
     const isUserAlreadyExists = await User.findOne({email: user.email})
     const passwordRepeatCorrectly = req.body.password === req.body.repeatPassword
 
-    let shortCode = req.body.email.slice(0,2) +  Date.now().toString().slice(10)
+    let shortCode = 'U' + req.body.email.slice(0,2) +  Date.now().toString().slice(10)
     user.shortCode = shortCode
     let shortCodeDuplicate = await User.findOne({shortCode: user.shortCode})
     /**
-     * Make longer shortcode if duplicated
+     * try again if shortCode duplicated
      */
     if(shortCodeDuplicate){
-        shortCode = req.body.email.slice(0,2) +  Date.now().toString().slice(9)
+        shortCode = 'U' + req.body.email.slice(0,2) +  Date.now().toString().slice(10)
         user.shortCode = shortCode
         shortCodeDuplicate = await User.findOne({shortCode: user.shortCode})
     }
@@ -51,7 +51,14 @@ router.post('/users', async (req, res)=>{
         const token = await user.generateAuthToken()
 
         const newUser = await user.save()
-        res.status(201).send({user: newUser,token})
+
+        if(!Object.keys(errors).length){
+            res.status(201).send({user: newUser,token})
+        }else{
+            await newUser.remove()
+            throw new Error('')
+        }
+
     }catch (e) {
 
         e.errors = {
@@ -64,6 +71,7 @@ router.post('/users', async (req, res)=>{
 })
 
 router.post('/users/login', async (req, res)=>{
+    const errors = {}
 
     const isValidEmail = validator.isEmail(req.body.email)
     try{

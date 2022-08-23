@@ -2,6 +2,7 @@ const express = require('express')
 
 const auth = require('../middleware/auth')
 
+const User = require('../models/User')
 const List = require('../models/List')
 const Image = require('../models/Image')
 const Player = require('../models/Player')
@@ -12,7 +13,7 @@ const router = new express.Router()
 
 router.post('/lists', auth, async(req, res)=>{
 
-    let shortCode = req.body.name[0] +  Date.now().toString().slice(10)
+    let shortCode = 'L' + req.body.name[0] + Date.now().toString().slice(10)
 
     const list = new List({
         ...req.body,
@@ -42,12 +43,27 @@ router.get('/lists', auth, async (req, res)=>{
  * shortCode validation
  */
 router.post('/lists/validation', async (req, res)=>{
-
+    let list = null
+    let user = null
+    let userLists = null
     try{
-        const list = await List.findOne({shortCode: req.body.shortCode})
+        const shortCodeType = req.body.shortCode.slice(0,1)
+        if(shortCodeType === 'L'){
+            list = await List.findOne({shortCode: req.body.shortCode})
+        }else if(shortCodeType === 'U'){
+            user = await User.findOne({shortCode: req.body.shortCode})
+            if(user){
+                userLists = await List.find({owner: user._id.toString()})
+                console.log({userLists})
+            }
+        }
+
         if(list){
-            res.send(list)
-        }else{
+            res.send({list})
+        }else if(user){
+            res.send({userLists})
+        }
+        else{
             res.status(404).send({errors: {
                     "shortCodeInput": {
                         message: "Niepoprawny kod"
