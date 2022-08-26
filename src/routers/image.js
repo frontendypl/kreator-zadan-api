@@ -27,7 +27,7 @@ const imageValidation = (img)=>{
 
     if(img.size > 5000000){
         errors.fileSize = {}
-        errors.fileSize.message = "Ten plik jest zbyt duży, max 5mb"
+        errors.fileSize.message = "Ten plik jest zbyt duży (limit 5mb)"
     }
     if(!img.mimetype.match(/image/)){
         errors.fileFormat = {}
@@ -42,7 +42,7 @@ router.post('/images', auth, upload.single('image'), async(req, res)=>{
     if(!req.body.url && !req.file){
         return res.status(500).send({errors: {
                 "fileInput": {
-                    message: "Nie wybrałeś żadnego obrazu."
+                    message: "Nie dodałeś żadnego obrazu. Użyj pól formularza."
                 },
                 "urlInput": {
                     message: ""

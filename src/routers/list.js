@@ -49,7 +49,7 @@ router.post('/lists/validation', async (req, res)=>{
     try{
         const shortCodeType = req.body.shortCode.slice(0,1)
         if(shortCodeType === 'L'){
-            list = await List.findOne({shortCode: req.body.shortCode})
+            list = await List.findOne({shortCode: req.body.shortCode}).populate('owner', 'shortCode')
         }else if(shortCodeType === 'U'){
             user = await User.findOne({shortCode: req.body.shortCode})
             if(user){
