@@ -139,7 +139,7 @@ router.get('/lists/:listId/:playerId/exercises', async (req, res)=>{
         }
 
         // console.log('tutaj', exercises[0].image?.toString())
-        const imageObject = exercises[0].image?.toString() ? await Image.findById(exercises[0].image) : null
+        const imageObject = exercises[0].image && exercises[0].image.toString() ? await Image.findById(exercises[0].image) : null
 
         res.send({completed, content: exercises[0], imageObject: imageObject})
     }catch (e) {
