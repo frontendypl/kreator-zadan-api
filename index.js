@@ -11,8 +11,7 @@ const imageRouter = require('./src/routers/image')
 const exerciseRouter = require('./src/routers/exercise')
 const answerRouter = require('./src/routers/answer')
 
-// const port = process.env.PORT || 2000 //TODO nie wiem jak z tym portem na serwerze 'atthost'
-const port = 3000 //TODO nie wiem jak z tym portem na serwerze 'atthost'
+const port = process.env.PORT || 2000 //TODO nie wiem jak z tym portem na serwerze 'atthost'
 
 const DATABASE_NAME = 'KreatorZadan'
 const uri = `mongodb+srv://${process.env.DATABASE_CONNECTION}/${DATABASE_NAME}?retryWrites=true&w=majority`;
