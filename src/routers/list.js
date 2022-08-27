@@ -138,7 +138,7 @@ router.get('/lists/:listId/:playerId/exercises', async (req, res)=>{
             return res.send({completed})
         }
 
-        console.log('tutaj', exercises[0].image?.toString())
+        // console.log('tutaj', exercises[0].image?.toString())
         const imageObject = exercises[0].image?.toString() ? await Image.findById(exercises[0].image) : null
 
         res.send({completed, content: exercises[0], imageObject: imageObject})
