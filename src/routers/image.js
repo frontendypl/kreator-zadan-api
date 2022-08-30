@@ -1,5 +1,6 @@
 const express = require('express')
 const Image = require('../models/Image')
+const Exercise = require('../models/Exercise')
 const auth = require('../middleware/auth')
 
 const validator = require('validator')
@@ -112,9 +113,10 @@ router.get('/images', auth, async(req, res)=>{
 
 })
 
-router.delete('/images/:id', auth, async(req, res)=>{
+router.patch('/images/:id', auth, async(req, res)=>{
     try{
         const image = await Image.findById(req.params.id)
+
         if(!image){
             return res.status(404).send({
                 errors: {
@@ -122,9 +124,23 @@ router.delete('/images/:id', auth, async(req, res)=>{
                 }
             })
         }
-        await image.remove()
-        res.send(image)
 
+        const exercises = await Exercise.find({image: req.params.id})
+
+        if(!exercises.length){
+            await image.remove()
+            res.send({
+                image,
+                message: 'Image deleted'
+            })
+        }else{
+            image.isArchived = req.body.isArchived
+            await image.save()
+            res.send({
+                image,
+                message: 'Image archived'
+            })
+        }
     }catch (e) {
         res.status(500).send({
             errors: {
