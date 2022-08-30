@@ -116,7 +116,7 @@ router.get('/lists/:listId/:playerId/exercises', async (req, res)=>{
     //TODO sprobować stworzyć w modelu wirtualną property isCorrect i pobierac tylko poprawne
 
     try{
-        let exercises = await Exercise.find({list: req.params.listId})
+        let exercises = await Exercise.find({list: req.params.listId, isArchived: false})
             .populate('answerOptions')
 
         console.log({exercises})

@@ -96,10 +96,10 @@ router.post('/exercises', auth, async (req, res)=>{
 
 })
 
-router.delete('/exercises/:id', auth, async(req, res)=>{
+router.patch('/exercises/:id', auth, async(req, res)=>{
 
     try{
-        const exercise = await Exercise.findOneAndDelete({owner: req.user._id, _id: req.params.id})
+        const exercise = await Exercise.findOneAndUpdate({owner: req.user._id},{isArchived: req.body.isArchived})
         res.send(exercise)
     }catch (e) {
         res.status(500).send(e)
