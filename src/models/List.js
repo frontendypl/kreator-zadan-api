@@ -4,6 +4,10 @@ const Exercise = require("./Exercise");
 const Player = require("./Player");
 
 const listSchema = new mongoose.Schema({
+    isArchived: {
+        type: Boolean,
+        default: false
+    },
     name: {
         type: String,
         trim: true,

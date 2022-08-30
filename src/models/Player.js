@@ -9,6 +9,10 @@ const playerSchema = new mongoose.Schema({
      * trzeba bedzie to walidować, player wysle tylko jakis krótki kod/nazwe gdyż prawdziwe Id bedzie za długie
      * może by sie dało ustawić ilość znaków dla listId, to by ułatwiło zadanie.
      */
+    isArchived: {
+        type: Boolean,
+        default: false
+    },
     listId: {
         type: mongoose.Schema.Types.ObjectId,
         trim: true,

@@ -1,6 +1,10 @@
 const mongoose = require('mongoose')
 
 const imageSchema = new mongoose.Schema({
+        isArchived: {
+            type: Boolean,
+            default: false
+        },
         src: {
             type: String,
             trim: true

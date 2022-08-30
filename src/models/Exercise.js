@@ -2,6 +2,10 @@ const mongoose = require('mongoose')
 const AnswerOption = require('./AnswerOption')
 
 const exerciseSchema = new mongoose.Schema({
+    isArchived: {
+      type: Boolean,
+      default: false
+    },
     image: {
         type: mongoose.Schema.Types.ObjectId || null,
         ref: 'Image'
