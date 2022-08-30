@@ -97,9 +97,8 @@ router.post('/exercises', auth, async (req, res)=>{
 })
 
 router.patch('/exercises/:id', auth, async(req, res)=>{
-
     try{
-        const exercise = await Exercise.findOneAndUpdate({owner: req.user._id},{isArchived: req.body.isArchived})
+        const exercise = await Exercise.findOneAndUpdate({_id: req.params.id},{isArchived: req.body.isArchived})
         res.send(exercise)
     }catch (e) {
         res.status(500).send(e)
