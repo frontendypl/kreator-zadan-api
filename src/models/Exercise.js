@@ -21,7 +21,7 @@ const exerciseSchema = new mongoose.Schema({
     },
     content: {
         type: String,
-        required: [true, 'Wpisz treść zdania. Np "Co widzisz na obrazku?"'],
+        // required: [true, 'Wpisz treść zdania. Np "Co widzisz na obrazku?"'],
         trim: true
     },
     answerOptions: [{
