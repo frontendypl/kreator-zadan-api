@@ -74,7 +74,16 @@ router.post('/images', auth, upload.single('image'), async(req, res)=>{
     })
 
     if(req.body.srcType === 'buffer'){
-        image.src = req.file.buffer.toString('base64')
+
+        // TODO use Sharp here to minify image if too big
+        const imageProcessed = await sharp(req.file.buffer)
+            .withMetadata()
+            .resize({height: 600})
+            .toBuffer()
+
+
+        // image.src = req.file.buffer.toString('base64')
+        image.src = imageProcessed.toString('base64')
         image.mimetype = req.file.mimetype
         image.originalname = req.file.originalname
     }else{
