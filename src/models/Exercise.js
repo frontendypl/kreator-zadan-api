@@ -27,7 +27,16 @@ const exerciseSchema = new mongoose.Schema({
     answerOptions: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'AnswerOption',
-    }]
+    }],
+    contentFont: {
+        type: String,
+        default: null
+    },
+    answersFont: {
+        type: String,
+        default: null
+    },
+
 },{
     timestamps: true
 })
