@@ -25,7 +25,7 @@ const listSchema = new mongoose.Schema({
         required: true,
         immutable: true,
         unique: [true, 'Spróbuj ponownie.']
-    }
+    },
 }, {
     timestamps: true
 })

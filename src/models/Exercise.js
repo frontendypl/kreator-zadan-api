@@ -35,8 +35,7 @@ const exerciseSchema = new mongoose.Schema({
     answersFont: {
         type: String,
         default: null
-    },
-
+    }
 },{
     timestamps: true
 })
