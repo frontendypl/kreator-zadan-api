@@ -130,29 +130,29 @@ router.patch('/exercises/:id/order', auth, async(req, res)=>{
 
 })
 
-router.get('/exercises/update-order', async (req, res)=>{
-    try {
-        const lists = await List.find()
-
-        lists.forEach(async (list)=>{
-            let i = 0
-            const exercises = await Exercise.find({list: list._id})
-
-            exercises.forEach(async(exercise)=>{
-                i = i + 1
-                if(!exercise.order){
-                    console.log(exercise)
-                    exercise.order = i
-                    await exercise.save()
-                }
-            })
-        })
-
-        res.send(lists)
-
-    }catch (e) {
-
-    }
-})
+// router.get('/exercises/update-order', async (req, res)=>{
+//     try {
+//         const lists = await List.find()
+//
+//         lists.forEach(async (list)=>{
+//             let i = 0
+//             const exercises = await Exercise.find({list: list._id})
+//
+//             exercises.forEach(async(exercise)=>{
+//                 i = i + 1
+//                 if(!exercise.order){
+//                     console.log(exercise)
+//                     exercise.order = i
+//                     await exercise.save()
+//                 }
+//             })
+//         })
+//
+//         res.send(lists)
+//
+//     }catch (e) {
+//
+//     }
+// })
 
 module.exports = router
