@@ -15,10 +15,10 @@ const exerciseSchema = new mongoose.Schema({
         ref: 'List',
         required: true
     },
-    // name: {
-    //     type: String,
-    //     required: [true, 'Nazwij zadanie.']
-    // },
+    order: {
+        type: Number,
+        required: true
+    },
     content: {
         type: String,
         // required: [true, 'Wpisz treść zdania. Np "Co widzisz na obrazku?"'],

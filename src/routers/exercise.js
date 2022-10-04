@@ -1,5 +1,6 @@
 const express = require('express')
 const Exercise = require('../models/Exercise')
+const List = require('../models/List')
 const AnswerOption = require('../models/AnswerOption')
 const auth = require('../middleware/auth')
 
@@ -11,10 +12,10 @@ const router = new express.Router()
 router.get('/lists/:listId/exercises', auth, async (req, res)=>{
 
     try{
-        console.log('tutaj', req.params.listId)
         const exercises = await Exercise.find({list: req.params.listId})
             .populate('image')
             .populate('answerOptions')
+            .sort({order: 1})
 
         res.send(exercises)
     }catch (e) {
@@ -60,12 +61,14 @@ router.post('/exercises', auth, async (req, res)=>{
 
     const exercise = new Exercise(req.body)
 
+    const exercisesCount = await Exercise.find({list: req.body.list}).count()
+    exercise.order = exercisesCount+1
+
     try{
         const newExercise = await exercise.save()
         if(!Object.keys(errors).length){
 
             req.body.answers.forEach(answer=>{
-                console.log({answer})
                 answer.exercise = newExercise._id.toString()
             })
 
@@ -103,7 +106,53 @@ router.patch('/exercises/:id', auth, async(req, res)=>{
     }catch (e) {
         res.status(500).send(e)
     }
+})
 
+router.patch('/exercises/:id/order', auth, async(req, res)=>{
+    try{
+        const exercise = await Exercise.findOne({list: req.body.list, order: req.body.order})
+
+        if(req.body.direction === 'down'){
+            await Exercise.findOneAndUpdate({list: req.body.list, order: req.body.order +1},{order: req.body.order})
+            exercise.order = req.body.order + 1
+            await exercise.save()
+        }else {
+            if(exercise.order !== 1){
+                await Exercise.findOneAndUpdate({list: req.body.list, order: req.body.order - 1},{order: req.body.order})
+                exercise.order = req.body.order - 1
+                await exercise.save()
+            }
+        }
+        res.send(exercise)
+    }catch (e) {
+        res.status(500).send(e)
+    }
+
+})
+
+router.get('/exercises/update-order', async (req, res)=>{
+    try {
+        const lists = await List.find()
+
+        lists.forEach(async (list)=>{
+            let i = 0
+            const exercises = await Exercise.find({list: list._id})
+
+            exercises.forEach(async(exercise)=>{
+                i = i + 1
+                if(!exercise.order){
+                    console.log(exercise)
+                    exercise.order = i
+                    await exercise.save()
+                }
+            })
+        })
+
+        res.send(lists)
+
+    }catch (e) {
+
+    }
 })
 
 module.exports = router
