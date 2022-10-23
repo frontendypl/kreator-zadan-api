@@ -9,11 +9,14 @@ const User = require('../models/User')
 const router = new express.Router()
 
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    pool: true,
+    host: "michal-kotula.atthost24.pl",
+    port: 465,
+    secure: true, // use TLS
     auth: {
-        user: 'frontendypl@gmail.com',
-        pass: 'axfuodpvcsmsqhpp'
-    }
+        user: "ucze.net@ucze.net",
+        pass: "majkel00atthost",
+    },
 });
 
 /** tylko dla admina, sprawdzać */
@@ -65,9 +68,9 @@ router.post('/users', async (req, res)=>{
         if(!Object.keys(errors).length){
 
             const mailOptions = {
-                // from: 'kotula87@gmail.com',
+                from: 'ucze.net@ucze.net',
                 to: 'frontendypl@gmail.com',
-                subject: `Ucze - new user ${newUser.email}, ${newUser._id}`,
+                subject: `New user ${newUser.email}, ${newUser._id}`,
                 html: `
                 <div>
                     <h3>Ucze.net new user registered - ${newUser.email}, ${newUser._id}</h3>
