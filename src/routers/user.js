@@ -1,10 +1,20 @@
 const express = require('express')
 const validator = require('validator')
+const nodemailer = require('nodemailer');
+
 const auth = require('../middleware/auth')
 
 const User = require('../models/User')
 
 const router = new express.Router()
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'frontendypl@gmail.com',
+        pass: 'axfuodpvcsmsqhpp'
+    }
+});
 
 /** tylko dla admina, sprawdzać */
 router.get('/users', async (req, res)=>{
@@ -53,6 +63,26 @@ router.post('/users', async (req, res)=>{
         const newUser = await user.save()
 
         if(!Object.keys(errors).length){
+
+            const mailOptions = {
+                // from: 'kotula87@gmail.com',
+                to: 'frontendypl@gmail.com',
+                subject: `Ucze - new user ${newUser.email}, ${newUser._id}`,
+                html: `
+                <div>
+                    <h3>Ucze.net new user registered - ${newUser.email}, ${newUser._id}</h3>
+                </div>
+            `
+            };
+            //
+            transporter.sendMail(mailOptions, function(error, info){
+                if (error) {
+                    // console.log(error);
+                } else {
+                    // console.log('Email sent: ' + info.response);
+                }
+            });
+
             res.status(201).send({user: newUser,token})
         }else{
             await newUser.remove()
