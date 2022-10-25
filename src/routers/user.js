@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express')
 const validator = require('validator')
 const nodemailer = require('nodemailer');
@@ -14,8 +15,8 @@ const transporter = nodemailer.createTransport({
     port: 465,
     secure: true, // use TLS
     auth: {
-        user: "ucze.net@ucze.net",
-        pass: "majkel00atthost",
+        user: `${process.env.EMAIL_USER}`,
+        pass: `${process.env.EMAIL_PASS}`,
     },
 });
 
@@ -68,7 +69,7 @@ router.post('/users', async (req, res)=>{
         if(!Object.keys(errors).length){
 
             const mailOptions = {
-                from: 'ucze.net@ucze.net',
+                from: `${process.env.EMAIL_USER}`,
                 to: 'frontendypl@gmail.com',
                 subject: `New user ${newUser.email}, ${newUser._id}`,
                 html: `
