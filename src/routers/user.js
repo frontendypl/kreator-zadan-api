@@ -20,11 +20,11 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-/** tylko dla admina, sprawdzać */
-router.get('/users', async (req, res)=>{
-    const users = await User.find()
-    res.send(users)
-})
+// /** tylko dla admina, sprawdzać */
+// router.get('/users', async (req, res)=>{
+//     const users = await User.find()
+//     res.send(users)
+// })
 
 router.post('/users', async (req, res)=>{
     const errors = {}
