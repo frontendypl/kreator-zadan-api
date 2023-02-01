@@ -11,6 +11,7 @@ const imageRouter = require('./src/routers/image')
 const exerciseRouter = require('./src/routers/exercise')
 const answerRouter = require('./src/routers/answer')
 const resetPassword = require('./src/routers/resetPassword')
+const youtubeVideo = require('./src/routers/youtubeVideo')
 
 const uri = `mongodb+srv://${process.env.DATABASE_CONNECTION}/${process.env.DATABASE_NAME}?retryWrites=true&w=majority`;
 
@@ -37,6 +38,7 @@ app.use(imageRouter)
 app.use(exerciseRouter)
 app.use(answerRouter)
 app.use(resetPassword)
+app.use(youtubeVideo)
 
 app.listen(process.env.PORT, ()=>{
     console.log('App is running on port', process.env.PORT)

@@ -118,6 +118,7 @@ router.get('/lists/:listId/:playerId/exercises', async (req, res)=>{
     try{
         let exercises = await Exercise.find({list: req.params.listId, isArchived: false})
             .populate('answerOptions')
+            .populate('youtubeVideo')
             .sort({order: 1})
 
         console.log({exercises})

@@ -10,6 +10,10 @@ const exerciseSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId || null,
         ref: 'Image'
     },
+    youtubeVideo: {
+        type: mongoose.Schema.Types.ObjectId || null,
+        ref: 'YoutubeVideo'
+    },
     list:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'List',

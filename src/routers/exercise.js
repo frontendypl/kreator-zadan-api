@@ -14,6 +14,7 @@ router.get('/lists/:listId/exercises', auth, async (req, res)=>{
     try{
         const exercises = await Exercise.find({list: req.params.listId})
             .populate('image')
+            .populate('youtubeVideo')
             .populate('answerOptions')
             .sort({order: 1})
 
