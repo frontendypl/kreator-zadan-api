@@ -24,6 +24,10 @@ mongoose
         console.error('Error connecting to mongo',error.reason)
     })
 
+var x = setInterval(()=>{
+    console.log(x._idleStart/5000)
+},5000)
+
 const app = express()
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
@@ -39,6 +43,10 @@ app.use(exerciseRouter)
 app.use(answerRouter)
 app.use(resetPassword)
 app.use(youtubeVideo)
+
+app.get('/timeWork', (req,res)=>{
+    res.send({times: x._idleStart/5000})
+})
 
 app.listen(process.env.PORT, ()=>{
     console.log('App is running on port', process.env.PORT)
