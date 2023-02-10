@@ -3,6 +3,7 @@ const express = require('express')
 const cors = require('cors')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
+const axios = require('axios');
 
 const playerRouter = require('./src/routers/player')
 const userRouter = require('./src/routers/user')
@@ -12,6 +13,7 @@ const exerciseRouter = require('./src/routers/exercise')
 const answerRouter = require('./src/routers/answer')
 const resetPassword = require('./src/routers/resetPassword')
 const youtubeVideo = require('./src/routers/youtubeVideo')
+
 
 const uri = `mongodb+srv://${process.env.DATABASE_CONNECTION}/${process.env.DATABASE_NAME}?retryWrites=true&w=majority`;
 
@@ -24,9 +26,14 @@ mongoose
         console.error('Error connecting to mongo',error.reason)
     })
 
-var x = setInterval(()=>{
-    console.log(x._idleStart/5000)
-},5000)
+const x = setInterval(async ()=>{
+    try {
+        const response = await axios.get('https://pytania-api.ucze.net/timeWork')
+        // console.log(response.data)
+    }catch (e) {
+
+    }
+},60000)
 
 const app = express()
 app.use(bodyParser.json())
